@@ -1,0 +1,21 @@
+Global: !omap
+    SETTINGS: /EEP/Tools/Settings
+    VERSION: 7.0
+    NUKE_EEP: <SETTINGS>/nuke/nuke_EEP
+    NUKE_MULTY: <SETTINGS>/nuke/<VERSION>/nuke_EEP
+
+Nuke: !omap
+    NUKE_PATH: /App/Nuke1.0/bin
+    NUKE_EEP: /Server03/Nuke
+    # FOUNDRY_LICENSE_FILE, foundry_LICENSE: 11111@blaa.aaa.com
+    NUKE_PATH:
+        - <NUKE_PATH>
+        - <NUKE_EEP>/gizmos
+        - <NUKE_EEP>/icons
+        - <NUKE_EEP>/nukescripts
+        - <NUKE_EEP>/plugins
+        - <NUKE_EEP>
+    OFX_PLUGIN_PATH:
+        - <NUKE_PATH>
+        - <NUKE_EEP>/ofx
+        - <NUKE_EEP>/ofx
