@@ -12,18 +12,19 @@ class EnConf(object):
     All variables defined in oder they were specified.
     So you can use template syntax <ENV_VAR_NAME> to substitute a value
 
-    Here is an example of possible configuration file:
+    Here is an example of a configuration file:
 
     ----------------------------------------------------------------------------
     Global: !omap
-        SETTINGS: /EEP/Tools/Settings
-        SHOWS: /Casino/Poker/Shows
+        SETTINGS: /Tools/Settings
+        SHOWS: /My/Shows/Folder
         PYTHONPATH:
             - <PYTHONPATH>
             - <SETTINGS>/Python/common
             - <SETTINGS>/Python/common/darwin
 
     Nuke: !omap
+
         FOUNDRY_LICENSE_FILE: 11111@blaa.eep.com
         foundry_LICENSE: 1111@blaa.eep.com
         NUKE_EEP: <SETTINGS>/nuke/nuke_EEP
@@ -89,8 +90,7 @@ class EnConf(object):
                     queue.append(value)
 
                 # Assemble new path for current env var
-                path = ''
-                cout = 0
+                path = ''; cout = 0
                 while queue:
                     if cout == 0:
                         path = queue.popleft()
@@ -107,8 +107,9 @@ def main():
     """
     Some test functions
     """
-    ec = EnConf('env_config.yml')
-    ec.set_env_vars()
+
+    ec = EnConf()
+    ec.from_file('./tests/env_test_config.yml')
 
 if __name__ == '__main__':
     main()
