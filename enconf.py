@@ -73,7 +73,7 @@ class EnConf(object):
 
                 queue = deque()
                 for value in values:
-                    value = str(value)
+                    value = os.path.normpath(str(value))
 
                     # Get template value
                     template_values = re.findall('\<(.*?)\>', value)
@@ -89,6 +89,8 @@ class EnConf(object):
 
                     queue.append(value)
 
+                    # assert (value.startswith('\\'))
+
                 # Assemble new path for current env var
                 path = ''; cout = 0
                 while queue:
@@ -100,6 +102,7 @@ class EnConf(object):
 
                 # Assign path to current variable
                 log.info('%s %s' % (name, path))
+
                 os.environ[name] = path
         log.line()
 
