@@ -2,9 +2,15 @@ import os
 import re
 import yaml
 from collections import deque
-from logger import Logger
+import logging
 
-log = Logger()
+log = logging.getLogger(__name__)
+
+
+def set_logger(logger):
+    global log
+    log = logger
+
 
 class EnConf(object):
     """
@@ -62,7 +68,7 @@ class EnConf(object):
         """
         Parse and set all environmental variables
         """
-        log.line()
+        log.info('-'*79)
         for k, v in self.config.items():
             for i in v:
                 name = str(i[0])
@@ -104,7 +110,7 @@ class EnConf(object):
                 log.info('%s %s' % (name, path))
 
                 os.environ[name] = path
-        log.line()
+        log.info('-'*79)
 
 def main():
     """
