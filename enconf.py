@@ -107,7 +107,9 @@ class EnConf(object):
                     cout += 1
 
                 # Assign path to current variable
-                log.info('%s %s' % (name, path))
+                log.info(name)
+                for val in path.split(os.pathsep):
+                    log.info('  %s' % val)
 
                 os.environ[name] = path
         log.info('-'*79)
