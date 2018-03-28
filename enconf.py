@@ -1,7 +1,7 @@
 import os
 import re
 import yaml
-from collections import deque
+from collections import deque, OrderedDict
 import logging
 
 log = logging.getLogger(__name__)
@@ -61,13 +61,14 @@ class EnConf(object):
         :param config_file: (str or pathlib) Path to config file
         """
         with open(str(config_file), 'r') as f:
-            self.config = yaml.load(f)
+            self.config = ordered_load(f)
         self.set_env_vars()
 
     def set_env_vars(self):
         """
         Parse and set all environmental variables
         """
+
         log.info('-'*79)
         for k, v in self.config.items():
             for i in v:
@@ -124,3 +125,15 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
+    class OrderedLoader(Loader):
+        pass
+    def construct_mapping(loader, node):
+        loader.flatten_mapping(node)
+        return object_pairs_hook(loader.construct_pairs(node))
+    OrderedLoader.add_constructor(
+        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+        construct_mapping)
+    return yaml.load(stream, OrderedLoader)
