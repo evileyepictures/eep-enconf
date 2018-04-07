@@ -69,50 +69,49 @@ class EnConf(object):
         Parse and set all environmental variables
         """
         log.info('-' * 79)
-        for k, v in self.config.items():
-            for i in v:
-                name = str(i[0])
-                values = i[1]
+        for v in self.config:
+            name = str(v[0])
+            values = v[1]
 
-                if not isinstance(values, list):
-                    values = [values]
+            if not isinstance(values, list):
+                values = [values]
 
-                queue = deque()
-                for value in values:
-                    value = os.path.normpath(str(value))
+            queue = deque()
+            for value in values:
+                value = os.path.normpath(str(value))
 
-                    # Get template value
-                    template_values = re.findall('\<(.*?)\>', value)
+                # Get template value
+                template_values = re.findall('\<(.*?)\>', value)
 
-                    # This will try to set all of the template values to
-                    # their corresponding environmental variable
-                    for v in template_values:
-                        try:
-                            v_val = os.environ[v]
-                        except KeyError:
-                            v_val = ''
-                        value = value.replace('<%s>' % v, v_val)
+                # This will try to set all of the template values to
+                # their corresponding environmental variable
+                for i in template_values:
+                    try:
+                        v_val = os.environ[i]
+                    except KeyError:
+                        v_val = ''
+                    value = value.replace('<%s>' % i, v_val)
 
-                    queue.append(value)
+                queue.append(value)
 
-                    # assert (value.startswith('\\'))
+                # assert (value.startswith('\\'))
 
-                # Assemble new path for current env var
-                path = ''
-                cout = 0
-                while queue:
-                    if cout == 0:
-                        path = queue.popleft()
-                    else:
-                        path = path + os.pathsep + queue.popleft()
-                    cout += 1
+            # Assemble new path for current env var
+            path = ''
+            cout = 0
+            while queue:
+                if cout == 0:
+                    path = queue.popleft()
+                else:
+                    path = path + os.pathsep + queue.popleft()
+                cout += 1
 
-                # Assign path to current variable
-                log.info(name)
-                for val in path.split(os.pathsep):
-                    log.info('  %s' % val)
+            # Assign path to current variable
+            log.info(name)
+            for val in path.split(os.pathsep):
+                log.info('  %s' % val)
 
-                os.environ[name] = path
+            os.environ[name] = path
         log.info('-' * 79)
 
 
